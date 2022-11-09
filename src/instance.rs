@@ -11,8 +11,8 @@ use jni::{
     JNIEnv,
 };
 use std::{collections::HashMap, convert::TryFrom, panic, rc::Rc};
-use wasmer_runtime::{imports, instantiate, DynFunc, Export, Value as WasmValue};
 use wasmer_runtime as core;
+use wasmer_runtime::{imports, instantiate, DynFunc, Export, Value as WasmValue};
 
 pub struct Instance {
     pub java_instance_object: GlobalRef,
@@ -37,7 +37,10 @@ impl Instance {
         let memories: HashMap<String, Memory> = instance
             .exports()
             .filter_map(|(export_name, export)| match export {
-                Export::Memory(memory) => Some((export_name.to_string(), Memory::new(Rc::new(memory.clone())))),
+                Export::Memory(memory) => Some((
+                    export_name.to_string(),
+                    Memory::new(Rc::new(memory.clone())),
+                )),
                 _ => None,
             })
             .collect();

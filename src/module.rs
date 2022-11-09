@@ -50,16 +50,14 @@ impl Module {
         serialized_module: Vec<u8>,
     ) -> Result<Self, Error> {
         let module = match unsafe { Artifact::deserialize(serialized_module.as_slice()) } {
-            Ok(artifact) => {
-                match load_cache_with(artifact) {
-                    Ok(module) => module,
-                    Err(_) => {
-                        return Err(runtime_error(format!(
-                            "Failed to compile the serialized module."
-                        )))
-                    }
+            Ok(artifact) => match load_cache_with(artifact) {
+                Ok(module) => module,
+                Err(_) => {
+                    return Err(runtime_error(format!(
+                        "Failed to compile the serialized module."
+                    )))
                 }
-            }
+            },
             Err(_) => return Err(runtime_error(format!("Failed to deserialize the module."))),
         };
 
@@ -117,7 +115,10 @@ pub extern "system" fn Java_org_wasmer_Module_nativeInstantiate(
         let memories: HashMap<String, Memory> = instance
             .exports()
             .filter_map(|(export_name, export)| match export {
-                Export::Memory(memory) => Some((export_name.to_string(), Memory::new(Rc::new(memory.clone())))),
+                Export::Memory(memory) => Some((
+                    export_name.to_string(),
+                    Memory::new(Rc::new(memory.clone())),
+                )),
                 _ => None,
             })
             .collect();
