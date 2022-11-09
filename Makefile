@@ -115,7 +115,7 @@ package:
 
 # Publish the package artifact to a public repository
 publish:
-	"./gradlew" --info uploadToBintray
+	"./gradlew" --info publish
 
 # Run a specific example, with `make run-example EXAMPLE=Simple` for instance.
 run-example:
