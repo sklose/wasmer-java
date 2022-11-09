@@ -120,10 +120,9 @@ jobs:
           asset_name: ${{ steps.create_jar.outputs.name }}
           asset_content_type: application/java-archive
 
-      - name: Upload JAR to Bintray (JCenter)
+      - name: Upload JAR to GitHub
         env:
-          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-          BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           export PATH="$HOME/.cargo/bin:$PATH"
